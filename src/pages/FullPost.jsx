@@ -14,14 +14,14 @@ export const FullPost = () => {
 
   React.useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/posts/${id}`)
       .then((res) => {
         setData(res.data);
         setLoading(false);
       })
       .catch((err) => {
         console.warn(err);
-        alert('Ошибка при получении статьи');
+        alert('Ошибка при получении статьи.');
       });
     // eslint-disable-next-line
   }, []);
