@@ -31,7 +31,7 @@ export const AddPost = () => {
       const formData = new FormData();
       const file = event.target.files[0];
       formData.append('image', file);
-      const { data } = await axios.post('http://localhost:4444/upload', formData);
+      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, formData);
       setImageUrl(data.url);
     } catch (error) {
       alert('Ошибка. Загрузи файл.');
@@ -58,8 +58,8 @@ export const AddPost = () => {
       };
 
       const { data } = isEditing
-        ? await axios.patch(`http://localhost:4444/posts/${id}`, fields)
-        : await axios.post('http://localhost:4444/posts', fields);
+        ? await axios.patch(`${process.env.REACT_APP_API_URL}/posts/${id}`, fields)
+        : await axios.post(`${process.env.REACT_APP_API_URL}/posts`, fields);
 
       const _id = isEditing ? id : data._id;
 
@@ -72,7 +72,7 @@ export const AddPost = () => {
 
   React.useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:4444/posts/${id}`).then(({ data }) => {
+      axios.get(`${process.env.REACT_APP_API_URL}/posts/${id}`).then(({ data }) => {
         setTitle(data.title);
         setText(data.text);
         setImageUrl(data.imageUrl);
@@ -112,7 +112,11 @@ export const AddPost = () => {
         </Button>
       )}
       {imageUrl && (
-        <img className={styles.image} src={`http://localhost:4444${imageUrl}`} alt="Uploaded" />
+        <img
+          className={styles.image}
+          src={`${process.env.REACT_APP_API_URL}${imageUrl}`}
+          alt="Uploaded"
+        />
       )}
       <br />
       <br />
