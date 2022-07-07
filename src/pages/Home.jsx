@@ -15,16 +15,17 @@ export const Home = () => {
   const { posts, tags } = useSelector((state) => state.posts);
   const userData = useSelector((state) => state.auth.data);
 
-  const isPostsLoading = posts.status === 'loading';
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  // const isPostsLoading = posts.status === 'loading';
   const isTagsLoading = tags.status === 'loading';
 
   React.useEffect(() => {
     dispatch(fetchPosts());
     dispatch(fetchTags());
+    setIsLoading(false);
     // eslint-disable-next-line
   }, []);
-
-  console.log(posts);
 
   return (
     <>
@@ -34,11 +35,14 @@ export const Home = () => {
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
-          {(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>
-            isPostsLoading ? (
-              <Post key={index} isLoading={true} />
-            ) : (
+          {isLoading ? (
+            <div>
+              <h1>Идет загрузка</h1>
+            </div>
+          ) : (
+            posts.items.map((obj, index) => (
               <Post
+                key={index}
                 id={obj._id}
                 title={obj.title}
                 // imageUrl={obj.imageUrl ? `${process.env.REACT_APP_API_URL}${obj.imageUrl}` : ''}
@@ -47,16 +51,16 @@ export const Home = () => {
                 user={obj.user}
                 createdAt={obj.createdAt}
                 viewsCount={obj.viewsCount}
-                commentsCount={3}
+                commentsCount={obj.comments.length}
                 tags={obj.tags}
                 isEditable={userData?._id === obj.user._id}
               />
-            ),
+            ))
           )}
         </Grid>
         <Grid xs={4} item>
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
-          <CommentsBlock
+          {/* <CommentsBlock
             items={[
               {
                 user: {
@@ -74,7 +78,7 @@ export const Home = () => {
               },
             ]}
             isLoading={false}
-          />
+          /> */}
         </Grid>
       </Grid>
     </>

@@ -10,46 +10,37 @@ import List from '@mui/material/List';
 import Skeleton from '@mui/material/Skeleton';
 import { useSelector } from 'react-redux';
 import { selectIsAuth } from '../redux/slices/auth';
-// import axios from 'axios';
+
 // import { useParams } from 'react-router-dom';
 
-export const CommentsBlock = ({ items, children, isLoading = true }) => {
+export const CommentsBlock = ({ children }) => {
   const isAuth = useSelector(selectIsAuth);
-  // const [data, setData] = React.useState();
-  // const { id } = useParams();
 
-  // const _id = JSON.stringify(id);
-
-  // console.log(data, id, _id);
-
-  // React.useEffect((_id) => {
-  //   axios.get(`http://localhost:4444/comment/get`, _id).then((res) => {
-  //     setData(res.data);
-  //   });
-  // }, []);
+  const { posts } = useSelector((state) => state.posts);
+  const isPostsLoading = posts.status === 'loading';
 
   return (
     <>
       {isAuth ? (
         <SideBlock title="Комментарии">
           <List>
-            {(isLoading ? [...Array(5)] : items).map((obj, index) => (
+            {(isPostsLoading ? [...Array(5)] : posts.items.comments).map((obj, index) => (
               <React.Fragment key={index}>
                 <ListItem alignItems="flex-start">
                   <ListItemAvatar>
-                    {isLoading ? (
+                    {isPostsLoading ? (
                       <Skeleton variant="circular" width={40} height={40} />
                     ) : (
-                      <Avatar alt={obj.user.fullName} src={obj.user.avatarUrl} />
+                      <Avatar alt={obj.user[0].fullName} src={obj.user[0].avatarUrl} />
                     )}
                   </ListItemAvatar>
-                  {isLoading ? (
+                  {isPostsLoading ? (
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                       <Skeleton variant="text" height={25} width={120} />
                       <Skeleton variant="text" height={18} width={230} />
                     </div>
                   ) : (
-                    <ListItemText primary={obj.user.fullName} secondary={obj.text} />
+                    <ListItemText primary={obj.user[0].fullName} secondary={obj.text} />
                   )}
                 </ListItem>
                 <Divider variant="inset" component="li" />

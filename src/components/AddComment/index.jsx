@@ -9,10 +9,13 @@ import Button from '@mui/material/Button';
 import { useParams } from 'react-router-dom';
 
 import axios from '../../axios';
+import { useSelector } from 'react-redux';
 
 export const Index = () => {
   const [comments, setComments] = React.useState('');
   const { id } = useParams();
+
+  const { posts } = useSelector((state) => state.posts);
 
   const onSubmit = async (e) => {
     try {
@@ -37,10 +40,7 @@ export const Index = () => {
   return (
     <>
       <div className={styles.root}>
-        <Avatar
-          classes={{ root: styles.avatar }}
-          src="https://mui.com/static/images/avatar/5.jpg"
-        />
+        <Avatar classes={{ root: styles.avatar }} src={posts.items.user.avatarUrl} />
         <div className={styles.form}>
           <TextField
             label="Написать комментарий"

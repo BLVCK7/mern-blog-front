@@ -15,13 +15,13 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <>
-    <CssBaseline />
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <CssBaseline />
+      <ThemeProvider theme={theme}>
         <Provider store={store}>
           <App />
         </Provider>
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   </>,
 );

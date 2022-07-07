@@ -5,47 +5,42 @@ import ReactMarkdown from 'react-markdown';
 import { Post } from '../components/Post';
 import { Index } from '../components/AddComment';
 import { CommentsBlock } from '../components/CommentsBlock';
-import axios from '../axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchGetPost } from '../redux/slices/posts';
 
 export const FullPost = () => {
-  const [data, setData] = React.useState();
-  const [isLoading, setLoading] = React.useState(true);
+  const dispatch = useDispatch();
   const { id } = useParams();
 
+  const { posts, tags } = useSelector((state) => state.posts);
+
+  const isPostsLoading = posts.status === 'loading';
+  const isTagsLoading = tags.status === 'loading';
+
   React.useEffect(() => {
-    axios
-      // .get(`${process.env.REACT_APP_API_URL}/posts/${id}`)
-      .get(`http://localhost:4444/posts/${id}`)
-      .then((res) => {
-        setData(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.warn(err);
-        alert('Ошибка при получении статьи.');
-      });
+    dispatch(fetchGetPost(id));
     // eslint-disable-next-line
   }, []);
 
-  if (isLoading) {
-    return <Post isLoading={isLoading} isFullPost />;
+  if (isPostsLoading) {
+    return <Post isFullPost />;
   }
 
   return (
     <>
       <Post
-        id={data._id}
-        title={data.title}
+        id={posts.items._id}
+        title={posts.items.title}
         // imageUrl={data.imageUrl ? `${process.env.REACT_APP_API_URL}${data.imageUrl}` : ''}
-        imageUrl={data.imageUrl ? `http://localhost:4444${data.imageUrl}` : ''}
+        imageUrl={posts.items.imageUrl ? `http://localhost:4444${posts.items.imageUrl}` : ''}
         // imageUrl="https://res.cloudinary.com/practicaldev/image/fetch/s--UnAfrEG8--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/icohm5g0axh9wjmu4oc3.png"
-        user={data.user}
-        createdAt={data.createdAt}
-        viewsCount={data.viewsCount}
+        user={posts.items.user}
+        createdAt={posts.items.createdAt}
+        viewsCount={posts.items.viewsCount}
         commentsCount={3}
-        tags={data.tags}
+        tags={posts.items.tags}
         isFullPost>
-        <ReactMarkdown children={data.text} />
+        <ReactMarkdown children={posts.items.text} />
       </Post>
       <CommentsBlock
         items={[
@@ -64,7 +59,8 @@ export const FullPost = () => {
             text: 'When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top',
           },
         ]}
-        isLoading={false}>
+        // isLoading={false}
+      >
         <Index />
       </CommentsBlock>
     </>

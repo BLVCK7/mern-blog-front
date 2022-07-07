@@ -1,34 +1,30 @@
-import React from "react";
+import React from 'react';
 
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import TagIcon from "@mui/icons-material/Tag";
-import ListItemText from "@mui/material/ListItemText";
-import Skeleton from "@mui/material/Skeleton";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import TagIcon from '@mui/icons-material/Tag';
+import ListItemText from '@mui/material/ListItemText';
+import Skeleton from '@mui/material/Skeleton';
 
-import { SideBlock } from "./SideBlock";
+import { SideBlock } from './SideBlock';
+import { useSelector } from 'react-redux';
 
-export const TagsBlock = ({ items, isLoading = true }) => {
+export const TagsBlock = ({ items }) => {
+  const { posts } = useSelector((state) => state.posts);
+  const isPostsLoading = posts.status === 'loading';
   return (
     <SideBlock title="Тэги">
       <List>
-        {(isLoading ? [...Array(5)] : items).map((name, i) => (
-          <a
-            style={{ textDecoration: "none", color: "black" }}
-            href={`/tags/${name}`}
-          >
+        {(isPostsLoading ? [...Array(5)] : items).map((name, i) => (
+          <a style={{ textDecoration: 'none', color: 'black' }} href={`/tags/${name}`}>
             <ListItem key={i} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
                   <TagIcon />
                 </ListItemIcon>
-                {isLoading ? (
-                  <Skeleton width={100} />
-                ) : (
-                  <ListItemText primary={name} />
-                )}
+                {isPostsLoading ? <Skeleton width={100} /> : <ListItemText primary={name} />}
               </ListItemButton>
             </ListItem>
           </a>

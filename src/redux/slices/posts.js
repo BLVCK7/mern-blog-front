@@ -15,6 +15,10 @@ import axios from '../../axios';
 //   await axios.delete(`${process.env.REACT_APP_API_URL}/posts/${id}`);
 // });
 
+// export const fetchGetPost = createAsyncThunk('posts/fetchGetPost', async (id) => {
+//   await axios.get(`${process.env.REACT_APP_API_URL}/posts/${id}`);
+// });
+
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
   const { data } = await axios.get(`http://localhost:4444/posts`);
   return data;
@@ -27,6 +31,11 @@ export const fetchTags = createAsyncThunk('posts/fetchTags', async () => {
 
 export const fetchRemovePost = createAsyncThunk('posts/fetchTags', async (id) => {
   await axios.delete(`http://localhost:4444/posts/${id}`);
+});
+
+export const fetchGetPost = createAsyncThunk('posts/fetchGetPost', async (id) => {
+  const { data } = await axios.get(`http://localhost:4444/posts/${id}`);
+  return data;
 });
 
 const initialState = {
@@ -72,6 +81,18 @@ const postsSlice = createSlice({
     // Удаление поста
     [fetchRemovePost.pending]: (state, action) => {
       state.posts.items = state.posts.items.filter((obj) => obj._id !== action.meta.arg);
+    },
+    // Получение статьи и комментов
+    [fetchGetPost.pending]: (state) => {
+      state.posts.status = 'loading';
+    },
+    [fetchGetPost.fulfilled]: (state, action) => {
+      state.posts.items = action.payload;
+      state.posts.status = 'loaded';
+    },
+    [fetchGetPost.rejected]: (state) => {
+      state.posts.items = [];
+      state.posts.status = 'error';
     },
   },
 });
