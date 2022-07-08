@@ -17,7 +17,6 @@ export const Index = () => {
   const [value, setValue] = React.useState('');
   const { id } = useParams();
 
-  const { posts } = useSelector((state) => state.posts);
   const { data } = useSelector((state) => state.auth);
 
   const onSubmit = async (e) => {
@@ -47,7 +46,7 @@ export const Index = () => {
   return (
     <>
       <div className={styles.root}>
-        <Avatar classes={{ root: styles.avatar }} src={posts.items.user.avatarUrl} />
+        <Avatar classes={{ root: styles.avatar }} src={data.avatarUrl} />
         <div className={styles.form}>
           <TextField
             label="Написать комментарий"

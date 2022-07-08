@@ -6,7 +6,6 @@ import Grid from '@mui/material/Grid';
 
 import { Post } from '../components/Post';
 import { TagsBlock } from '../components/TagsBlock';
-import { CommentsBlock } from '../components/CommentsBlock';
 
 import { fetchPosts, fetchTags } from '../redux/slices/posts';
 
@@ -16,6 +15,7 @@ export const Home = () => {
   const userData = useSelector((state) => state.auth.data);
 
   const isPostsLoading = posts.status === 'loading';
+  const isTagsLoading = tags.status === 'loading';
 
   React.useEffect(() => {
     dispatch(fetchPosts());
@@ -31,30 +31,26 @@ export const Home = () => {
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
-          {isPostsLoading ? (
-            <div>
-              <h1>Идет загрузка</h1>
-            </div>
-          ) : (
-            posts.items.map((obj, index) => (
+          {(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>
+            isPostsLoading ? (
+              <Post key={index} isLoading={true} />
+            ) : (
               <Post
-                key={index}
                 id={obj._id}
                 title={obj.title}
-                // imageUrl={obj.imageUrl ? `${process.env.REACT_APP_API_URL}${obj.imageUrl}` : ''}
                 imageUrl={obj.imageUrl ? `http://localhost:4444${obj.imageUrl}` : ''}
                 user={obj.user}
                 createdAt={obj.createdAt}
                 viewsCount={obj.viewsCount}
-                commentsCount={obj.comments.length}
+                commentsCount={3}
                 tags={obj.tags}
                 isEditable={userData?._id === obj.user._id}
               />
-            ))
+            ),
           )}
         </Grid>
         <Grid xs={4} item>
-          <TagsBlock items={tags.items} />
+          <TagsBlock items={tags.items} isLoading={isTagsLoading} />
         </Grid>
       </Grid>
     </>

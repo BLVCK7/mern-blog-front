@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
 import styles from './Header.module.scss';
@@ -22,9 +22,9 @@ export const Header = () => {
     <div className={styles.root}>
       <Container maxWidth="lg">
         <div className={styles.inner}>
-          <Link className={styles.logo} to="/">
-            <div>ARCHAKOV BLOG</div>
-          </Link>
+          <NavLink className={styles.logo} to="/">
+            <div>TEST BLOG</div>
+          </NavLink>
           <div className={styles.buttons}>
             {isAuth ? (
               <>

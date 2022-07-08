@@ -33,8 +33,8 @@ export const fetchRemovePost = createAsyncThunk('posts/fetchTags', async (id) =>
   await axios.delete(`http://localhost:4444/posts/${id}`);
 });
 
-export const fetchGetPost = createAsyncThunk('posts/fetchGetPost', async (id) => {
-  const { data } = await axios.get(`http://localhost:4444/posts/${id}`);
+export const fetchComments = createAsyncThunk('posts/fetchComments', async (id) => {
+  const { data } = await axios.get(`http://localhost:4444/comment/${id}`);
   return data;
 });
 
@@ -47,6 +47,10 @@ const initialState = {
     items: [],
     status: 'loading',
   },
+  comments: {
+    items: [],
+    status: 'loading',
+  },
 };
 
 const postsSlice = createSlice({
@@ -54,7 +58,7 @@ const postsSlice = createSlice({
   initialState,
   reducers: {
     addComment: (state, action) => {
-      state.posts.items.comments = [...state.posts.items.comments, action.payload];
+      state.comments.items = [...state.comments.items, action.payload];
     },
   },
   extraReducers: {
@@ -86,17 +90,17 @@ const postsSlice = createSlice({
     [fetchRemovePost.pending]: (state, action) => {
       state.posts.items = state.posts.items.filter((obj) => obj._id !== action.meta.arg);
     },
-    // Получение статьи и комментов
-    [fetchGetPost.pending]: (state) => {
-      state.posts.status = 'loading';
+    // Получение комментов
+    [fetchComments.pending]: (state) => {
+      state.comments.status = 'loading';
     },
-    [fetchGetPost.fulfilled]: (state, action) => {
-      state.posts.items = action.payload;
-      state.posts.status = 'loaded';
+    [fetchComments.fulfilled]: (state, action) => {
+      state.comments.items = action.payload;
+      state.comments.status = 'loaded';
     },
-    [fetchGetPost.rejected]: (state) => {
-      state.posts.items = [];
-      state.posts.status = 'error';
+    [fetchComments.rejected]: (state) => {
+      state.comments.items = [];
+      state.comments.status = 'error';
     },
   },
 });
