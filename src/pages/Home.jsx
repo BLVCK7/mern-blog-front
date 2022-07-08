@@ -15,15 +15,11 @@ export const Home = () => {
   const { posts, tags } = useSelector((state) => state.posts);
   const userData = useSelector((state) => state.auth.data);
 
-  const [isLoading, setIsLoading] = React.useState(true);
-
-  // const isPostsLoading = posts.status === 'loading';
-  const isTagsLoading = tags.status === 'loading';
+  const isPostsLoading = posts.status === 'loading';
 
   React.useEffect(() => {
     dispatch(fetchPosts());
     dispatch(fetchTags());
-    setIsLoading(false);
     // eslint-disable-next-line
   }, []);
 
@@ -35,7 +31,7 @@ export const Home = () => {
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
-          {isLoading ? (
+          {isPostsLoading ? (
             <div>
               <h1>Идет загрузка</h1>
             </div>
@@ -47,7 +43,6 @@ export const Home = () => {
                 title={obj.title}
                 // imageUrl={obj.imageUrl ? `${process.env.REACT_APP_API_URL}${obj.imageUrl}` : ''}
                 imageUrl={obj.imageUrl ? `http://localhost:4444${obj.imageUrl}` : ''}
-                // imageUrl="https://res.cloudinary.com/practicaldev/image/fetch/s--UnAfrEG8--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/icohm5g0axh9wjmu4oc3.png"
                 user={obj.user}
                 createdAt={obj.createdAt}
                 viewsCount={obj.viewsCount}
@@ -59,26 +54,7 @@ export const Home = () => {
           )}
         </Grid>
         <Grid xs={4} item>
-          <TagsBlock items={tags.items} isLoading={isTagsLoading} />
-          {/* <CommentsBlock
-            items={[
-              {
-                user: {
-                  fullName: 'Вася Пупкин',
-                  avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
-                },
-                text: 'Это тестовый комментарий',
-              },
-              {
-                user: {
-                  fullName: 'Иван Иванов',
-                  avatarUrl: 'https://mui.com/static/images/avatar/2.jpg',
-                },
-                text: 'When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top',
-              },
-            ]}
-            isLoading={false}
-          /> */}
+          <TagsBlock items={tags.items} />
         </Grid>
       </Grid>
     </>

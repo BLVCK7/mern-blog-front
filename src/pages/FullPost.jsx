@@ -12,10 +12,9 @@ export const FullPost = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const { posts, tags } = useSelector((state) => state.posts);
+  const { posts } = useSelector((state) => state.posts);
 
   const isPostsLoading = posts.status === 'loading';
-  const isTagsLoading = tags.status === 'loading';
 
   React.useEffect(() => {
     dispatch(fetchGetPost(id));
@@ -37,30 +36,12 @@ export const FullPost = () => {
         user={posts.items.user}
         createdAt={posts.items.createdAt}
         viewsCount={posts.items.viewsCount}
-        commentsCount={3}
+        commentsCount={posts.items.comments.length}
         tags={posts.items.tags}
         isFullPost>
         <ReactMarkdown children={posts.items.text} />
       </Post>
-      <CommentsBlock
-        items={[
-          {
-            user: {
-              fullName: 'Вася Пупкин',
-              avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
-            },
-            text: 'Это тестовый комментарий 555555',
-          },
-          {
-            user: {
-              fullName: 'Иван Иванов',
-              avatarUrl: 'https://mui.com/static/images/avatar/2.jpg',
-            },
-            text: 'When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top',
-          },
-        ]}
-        // isLoading={false}
-      >
+      <CommentsBlock>
         <Index />
       </CommentsBlock>
     </>

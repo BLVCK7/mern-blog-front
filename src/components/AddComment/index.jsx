@@ -9,24 +9,31 @@ import Button from '@mui/material/Button';
 import { useParams } from 'react-router-dom';
 
 import axios from '../../axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addComment } from '../../redux/slices/posts';
 
 export const Index = () => {
-  const [comments, setComments] = React.useState('');
+  const dispatch = useDispatch();
+  const [value, setValue] = React.useState('');
   const { id } = useParams();
 
   const { posts } = useSelector((state) => state.posts);
+  const { data } = useSelector((state) => state.auth);
 
   const onSubmit = async (e) => {
     try {
-      const fields = {
-        comments,
-        id,
+      const commentData = {
+        userName: data.fullName,
+        avatarUrl: data.avatarUrl,
+        text: value,
+        postId: id,
       };
 
-      await axios.post(`http://localhost:4444/comment/add`, fields);
+      await axios.post(`http://localhost:4444/comment/add`, commentData);
 
-      setComments('');
+      dispatch(addComment(commentData));
+
+      setValue('');
 
       // const _id = isEditing ? id : data._id;
 
@@ -45,8 +52,8 @@ export const Index = () => {
           <TextField
             label="Написать комментарий"
             variant="outlined"
-            value={comments}
-            onChange={(e) => setComments(e.target.value)}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
             maxRows={10}
             multiline
             fullWidth

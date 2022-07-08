@@ -52,7 +52,11 @@ const initialState = {
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {},
+  reducers: {
+    addComment: (state, action) => {
+      state.posts.items.comments = [...state.posts.items.comments, action.payload];
+    },
+  },
   extraReducers: {
     // Получение статей
     [fetchPosts.pending]: (state) => {
@@ -98,3 +102,5 @@ const postsSlice = createSlice({
 });
 
 export const postsReducer = postsSlice.reducer;
+
+export const { addComment } = postsSlice.actions;

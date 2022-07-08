@@ -11,27 +11,28 @@ import Skeleton from '@mui/material/Skeleton';
 import { useSelector } from 'react-redux';
 import { selectIsAuth } from '../redux/slices/auth';
 
-// import { useParams } from 'react-router-dom';
-
 export const CommentsBlock = ({ children }) => {
   const isAuth = useSelector(selectIsAuth);
 
   const { posts } = useSelector((state) => state.posts);
+
   const isPostsLoading = posts.status === 'loading';
+
+  const getAllComments = posts.items.comments;
 
   return (
     <>
       {isAuth ? (
         <SideBlock title="Комментарии">
           <List>
-            {(isPostsLoading ? [...Array(5)] : posts.items.comments).map((obj, index) => (
+            {(isPostsLoading ? [...Array(5)] : getAllComments).map((obj, index) => (
               <React.Fragment key={index}>
                 <ListItem alignItems="flex-start">
                   <ListItemAvatar>
                     {isPostsLoading ? (
                       <Skeleton variant="circular" width={40} height={40} />
                     ) : (
-                      <Avatar alt={obj.user[0].fullName} src={obj.user[0].avatarUrl} />
+                      <Avatar alt={obj.avatarUrl} src={obj.avatarUrl} />
                     )}
                   </ListItemAvatar>
                   {isPostsLoading ? (
@@ -40,7 +41,7 @@ export const CommentsBlock = ({ children }) => {
                       <Skeleton variant="text" height={18} width={230} />
                     </div>
                   ) : (
-                    <ListItemText primary={obj.user[0].fullName} secondary={obj.text} />
+                    <ListItemText primary={obj.userName} secondary={obj.text} />
                   )}
                 </ListItem>
                 <Divider variant="inset" component="li" />
