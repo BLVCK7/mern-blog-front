@@ -9,17 +9,25 @@ import ListItemText from '@mui/material/ListItemText';
 import Skeleton from '@mui/material/Skeleton';
 
 import { SideBlock } from './SideBlock';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { fetchPostsFromTags } from '../redux/slices/posts';
 
 export const TagsBlock = ({ items }) => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
   const { posts } = useSelector((state) => state.posts);
   const isPostsLoading = posts.status === 'loading';
+
+  React.useEffect(() => {
+    dispatch(fetchPostsFromTags(id));
+  }, [dispatch, id]);
+
   return (
     <SideBlock title="Тэги">
       <List>
         {(isPostsLoading ? [...Array(5)] : items).map((name, i) => (
-          <Link style={{ textDecoration: 'none', color: 'black' }} to={`/tags/${name}`}>
+          <Link key={i} style={{ textDecoration: 'none', color: 'black' }} to={`/tags/${name}`}>
             <ListItem key={i} disablePadding>
               <ListItemButton>
                 <ListItemIcon>

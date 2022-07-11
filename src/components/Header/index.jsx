@@ -19,11 +19,16 @@ export const Header = () => {
     }
   };
 
+  const refreshRequests = () => {
+    dispatch(fetchPosts());
+    dispatch(fetchTags());
+  };
+
   return (
     <div className={styles.root}>
       <Container maxWidth="lg">
         <div className={styles.inner}>
-          <NavLink className={styles.logo} to="/">
+          <NavLink className={styles.logo} to="/" onClick={refreshRequests}>
             <div>TEST BLOG</div>
           </NavLink>
           <div className={styles.buttons}>

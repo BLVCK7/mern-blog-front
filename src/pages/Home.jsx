@@ -8,7 +8,7 @@ import { Post } from '../components/Post';
 import { TagsBlock } from '../components/TagsBlock';
 
 import { fetchNewestPosts, fetchPosts, fetchTags } from '../redux/slices/posts';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -24,8 +24,7 @@ export const Home = () => {
     dispatch(fetchPosts());
     dispatch(fetchTags());
     setActiveTab(0);
-    // eslint-disable-next-line
-  }, []);
+  }, [dispatch]);
 
   const getNewestPosts = () => {
     dispatch(fetchNewestPosts());
@@ -38,8 +37,6 @@ export const Home = () => {
     setActiveTab(0);
     navigate('/posts/popular');
   };
-
-  console.log(posts.items);
 
   return (
     <>
@@ -54,6 +51,7 @@ export const Home = () => {
               <Post key={index} isLoading={true} />
             ) : (
               <Post
+                key={index}
                 id={obj._id}
                 title={obj.title}
                 imageUrl={obj.imageUrl ? `http://localhost:4444${obj.imageUrl}` : ''}

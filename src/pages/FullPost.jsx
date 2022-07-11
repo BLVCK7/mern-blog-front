@@ -26,13 +26,11 @@ export const FullPost = () => {
         console.warn(err);
         alert('Ошибка при получении статьи');
       });
-  }, []);
+  }, [id]);
 
   if (isLoading) {
     return <Post isLoading={isLoading} isFullPost />;
   }
-
-  console.log(authStatus);
 
   return (
     <>

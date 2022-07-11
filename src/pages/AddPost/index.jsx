@@ -16,7 +16,7 @@ export const AddPost = () => {
   const navigate = useNavigate();
   const isAuth = useSelector(selectIsAuth);
 
-  const [isLoading, setLoading] = React.useState(false);
+  const [setLoading] = React.useState(false);
   const [text, setText] = React.useState('');
   const [title, setTitle] = React.useState('');
   const [tags, setTags] = React.useState('');
@@ -83,7 +83,7 @@ export const AddPost = () => {
         setTags(data.tags.join(','));
       });
     }
-  }, []);
+  }, [id]);
 
   const options = React.useMemo(
     () => ({

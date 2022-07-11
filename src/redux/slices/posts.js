@@ -43,6 +43,11 @@ export const fetchNewestPosts = createAsyncThunk('posts/fetchNewestPosts', async
   return data;
 });
 
+export const fetchPostsFromTags = createAsyncThunk('posts/fetchPostsFromTags', async (id) => {
+  const { data } = await axios.get(`http://localhost:4444/tags/${id}`);
+  return data;
+});
+
 const initialState = {
   posts: {
     items: [],
@@ -50,6 +55,7 @@ const initialState = {
   },
   tags: {
     items: [],
+    isActive: false,
     status: 'loading',
   },
   comments: {
@@ -116,6 +122,18 @@ const postsSlice = createSlice({
       state.posts.status = 'loaded';
     },
     [fetchNewestPosts.rejected]: (state) => {
+      state.posts.items = [];
+      state.posts.status = 'error';
+    },
+    // Получение статей по тегам
+    [fetchPostsFromTags.pending]: (state) => {
+      state.posts.status = 'loading';
+    },
+    [fetchPostsFromTags.fulfilled]: (state, action) => {
+      state.posts.items = action.payload;
+      state.posts.status = 'loaded';
+    },
+    [fetchPostsFromTags.rejected]: (state) => {
       state.posts.items = [];
       state.posts.status = 'error';
     },
