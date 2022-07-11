@@ -38,6 +38,11 @@ export const fetchComments = createAsyncThunk('posts/fetchComments', async (id) 
   return data;
 });
 
+export const fetchNewestPosts = createAsyncThunk('posts/fetchNewestPosts', async () => {
+  const { data } = await axios.get(`http://localhost:4444/posts/newest`);
+  return data;
+});
+
 const initialState = {
   posts: {
     items: [],
@@ -101,6 +106,18 @@ const postsSlice = createSlice({
     [fetchComments.rejected]: (state) => {
       state.comments.items = [];
       state.comments.status = 'error';
+    },
+    // Получение популярных статей
+    [fetchNewestPosts.pending]: (state) => {
+      state.posts.status = 'loading';
+    },
+    [fetchNewestPosts.fulfilled]: (state, action) => {
+      state.posts.items = action.payload;
+      state.posts.status = 'loaded';
+    },
+    [fetchNewestPosts.rejected]: (state) => {
+      state.posts.items = [];
+      state.posts.status = 'error';
     },
   },
 });

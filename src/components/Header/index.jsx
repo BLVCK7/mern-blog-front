@@ -6,6 +6,7 @@ import styles from './Header.module.scss';
 import Container from '@mui/material/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, selectIsAuth } from '../../redux/slices/auth';
+import { fetchPosts, fetchTags } from '../../redux/slices/posts';
 
 export const Header = () => {
   const dispatch = useDispatch();

@@ -10,6 +10,7 @@ import Skeleton from '@mui/material/Skeleton';
 
 import { SideBlock } from './SideBlock';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export const TagsBlock = ({ items }) => {
   const { posts } = useSelector((state) => state.posts);
@@ -18,7 +19,7 @@ export const TagsBlock = ({ items }) => {
     <SideBlock title="Тэги">
       <List>
         {(isPostsLoading ? [...Array(5)] : items).map((name, i) => (
-          <a style={{ textDecoration: 'none', color: 'black' }} href={`/tags/${name}`}>
+          <Link style={{ textDecoration: 'none', color: 'black' }} to={`/tags/${name}`}>
             <ListItem key={i} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
@@ -27,7 +28,7 @@ export const TagsBlock = ({ items }) => {
                 {isPostsLoading ? <Skeleton width={100} /> : <ListItemText primary={name} />}
               </ListItemButton>
             </ListItem>
-          </a>
+          </Link>
         ))}
       </List>
     </SideBlock>

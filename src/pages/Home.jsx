@@ -7,12 +7,15 @@ import Grid from '@mui/material/Grid';
 import { Post } from '../components/Post';
 import { TagsBlock } from '../components/TagsBlock';
 
-import { fetchPosts, fetchTags } from '../redux/slices/posts';
+import { fetchNewestPosts, fetchPosts, fetchTags } from '../redux/slices/posts';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Home = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { posts, tags } = useSelector((state) => state.posts);
   const userData = useSelector((state) => state.auth.data);
+  const [activeTab, setActiveTab] = React.useState(0);
 
   const isPostsLoading = posts.status === 'loading';
   const isTagsLoading = tags.status === 'loading';
@@ -20,14 +23,29 @@ export const Home = () => {
   React.useEffect(() => {
     dispatch(fetchPosts());
     dispatch(fetchTags());
+    setActiveTab(0);
     // eslint-disable-next-line
   }, []);
 
+  const getNewestPosts = () => {
+    dispatch(fetchNewestPosts());
+    setActiveTab(1);
+    navigate('/posts/newest');
+  };
+
+  const getPopularPosts = () => {
+    dispatch(fetchPosts());
+    setActiveTab(0);
+    navigate('/posts/popular');
+  };
+
+  console.log(posts.items);
+
   return (
     <>
-      <Tabs style={{ marginBottom: 15 }} value={0} aria-label="basic tabs example">
-        <Tab label="Новые" />
-        <Tab label="Популярные" />
+      <Tabs style={{ marginBottom: 15 }} value={activeTab} aria-label="basic tabs example">
+        <Tab label="Популярные" onClick={getPopularPosts} />
+        <Tab label="Новые" onClick={getNewestPosts} />
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
@@ -42,7 +60,7 @@ export const Home = () => {
                 user={obj.user}
                 createdAt={obj.createdAt}
                 viewsCount={obj.viewsCount}
-                commentsCount={3}
+                commentsCount={obj.comments.length}
                 tags={obj.tags}
                 isEditable={userData?._id === obj.user._id}
               />
