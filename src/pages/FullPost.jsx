@@ -32,6 +32,8 @@ export const FullPost = () => {
     return <Post isLoading={isLoading} isFullPost />;
   }
 
+  console.log(id);
+
   return (
     <>
       {authStatus === 'error' ? (

@@ -16,7 +16,8 @@ export const AddPost = () => {
   const navigate = useNavigate();
   const isAuth = useSelector(selectIsAuth);
 
-  const [setLoading] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [isLoading, setLoading] = React.useState(false);
   const [text, setText] = React.useState('');
   const [title, setTitle] = React.useState('');
   const [tags, setTags] = React.useState('');
