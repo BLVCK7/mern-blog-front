@@ -17,7 +17,7 @@ export const FullPost = () => {
 
   React.useEffect(() => {
     axios
-      .get(`http://localhost:4444/posts/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/posts/${id}`)
       .then((res) => {
         setData(res.data);
         setLoading(false);

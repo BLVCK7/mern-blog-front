@@ -28,7 +28,7 @@ export const Index = () => {
         postId: id,
       };
 
-      await axios.post(`http://localhost:4444/comment/add`, commentData);
+      await axios.post(`${process.env.REACT_APP_API_URL}/comment/add`, commentData);
 
       dispatch(addComment(commentData));
 
